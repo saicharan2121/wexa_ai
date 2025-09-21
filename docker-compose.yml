@@ -1,0 +1,25 @@
+services:
+  mongo:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  api:
+    build: ./server
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - MONGO_URI=mongodb://mongo:27017/helpdesk
+      - JWT_SECRET=your-super-secret-jwt-key-wexa-helpdesk-2025
+      - DEFAULT_ADMIN_EMAIL=admin@wexa.com
+      - DEFAULT_ADMIN_PASSWORD=admin123
+    depends_on:
+      - mongo
+    ports:
+      - "8080:8080"
+
+volumes:
+  mongo_data:
